@@ -5,6 +5,8 @@ const containerRef=document.getElementById("container");
 const quoteRef=document.getElementById("quote");
 let interval=null;
 let qq=null;
+let startTime=null;
+let correctStrokes=0;
 // async function getData(){
 //     var data = await (await fetch(url)).json();
 //     document.getElementById("container").innerHTML=data["content"];
@@ -59,6 +61,7 @@ function start(){
     containerRef.setAttribute("data-index","0");
     qq=quoteRef.innerText;
     highLight(0);
+    startTime=new Date();
     interval=setInterval(startTimer,1000);
 }
 
@@ -75,8 +78,9 @@ function reset(){
     containerRef.setAttribute("data-index","0");
     quoteRef.innerText='';
     containerRef.setAttribute("data-char",quoteRef.innerText.charAt(0));
-    
-}
+    correctStrokes=0;
+    wpmRef.innerText=0;
+}   
 
 
 containerRef.addEventListener("click",start);
@@ -106,6 +110,7 @@ containerRef.addEventListener("keyup",(event)=>{
 
     if(quoteRef.innerText.charAt(index)==key){
         span.classList.add("correct");
+        correctStrokes++;
     }else{
         span.classList.add("incorrect");
     }
@@ -116,7 +121,19 @@ containerRef.addEventListener("keyup",(event)=>{
     sel.collapseToEnd();
 
     quoteRef.innerText=qq;
-    highLight(index+1);
+    const timeElapsed=Math.floor((new Date() - startTime) / 1000);
+    const wpm=Math.round(parseFloat(correctStrokes) / 5.0 / (parseFloat(timeElapsed) / 60.0));
+    wpmRef.innerText=wpm;
+
+
+    if(index>=qq.length-1){
+        reset();
+        //alert("Your typing spped is "+wpm+" wpm");
+        containerRef.innerText='Click here to start Typing...';
+        containerRef.blur();
+    }else{
+        highLight(index+1);
+    }
     
 });
 
