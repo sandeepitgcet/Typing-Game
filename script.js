@@ -7,6 +7,7 @@ let interval=null;
 let qq=null;
 let startTime=null;
 let correctStrokes=0;
+const typedChars=[];
 // async function getData(){
 //     var data = await (await fetch(url)).json();
 //     document.getElementById("container").innerHTML=data["content"];
@@ -80,6 +81,7 @@ function reset(){
     containerRef.setAttribute("data-char",quoteRef.innerText.charAt(0));
     correctStrokes=0;
     wpmRef.innerText=0;
+    typedChars.splice(0,typedChars.length);
 }   
 
 
@@ -91,44 +93,65 @@ containerRef.addEventListener("keydown",(event)=>{
     
     
 });
+
+function renderTypedChar(){
+    containerRef.innerHTML='';
+    for(let i=0;i<typedChars.length;i++){
+        const span=document.createElement("span");
+        if(typedChars[i]==' '){
+            span.innerHTML='&nbsp;';
+        }else{
+            span.innerHTML=typedChars[i];
+        }
+        
+        if(qq.charAt(i)==typedChars[i]){
+            span.className="correct";
+        }else{
+            span.className="incorrect";
+        }
+        containerRef.appendChild(span);
+    }
+}
+
 containerRef.addEventListener("keyup",(event)=>{
     event.preventDefault();
-    const keys=["Enter","CapsLock","Backspace","Delete","Control","Shift","Tab"];
+    const keys=["Enter","CapsLock","Delete","Control","Shift","Tab"];
     const key=event.key;
+    const index=parseInt(containerRef.getAttribute("data-index"));
     if(keys.includes(key)){
         return;
-    }else if(key==" "){
-        containerRef.innerHTML+='&nbsp';
+    }else if(key=="Backspace"){
+        containerRef.setAttribute("data-index",index-1);
+        highLight(index-1);
+        typedChars.pop();
     }
-    const span=document.createElement("span");
-    if(key!="Shift"){
-        event.preventDefault();
-        span.innerText=key;
+    else{
+        containerRef.setAttribute("data-index",index+1);
+        typedChars.push(key);
+        highLight(index+1);
     }
     
-    const index=parseInt(containerRef.getAttribute("data-index"));
+    renderTypedChar();
 
-    if(quoteRef.innerText.charAt(index)==key){
-        span.classList.add("correct");
-        correctStrokes++;
-    }else{
-        span.classList.add("incorrect");
-    }
-    containerRef.setAttribute("data-index",index+1);
-    containerRef.innerHTML+=span.outerHTML;
     let sel = window.getSelection();
     sel.selectAllChildren(containerRef);
     sel.collapseToEnd();
 
     quoteRef.innerText=qq;
     const timeElapsed=Math.floor((new Date() - startTime) / 1000);
+    let correctStrokes=0;
+    containerRef.querySelectorAll("span").forEach((span)=>{
+        if(span.classList.contains("correct")){
+            correctStrokes++;
+        }
+    });
     const wpm=Math.round(parseFloat(correctStrokes) / 5.0 / (parseFloat(timeElapsed) / 60.0));
     wpmRef.innerText=wpm;
 
 
     if(index>=qq.length-1){
         reset();
-        //alert("Your typing spped is "+wpm+" wpm");
+        alert("Your typing spped is "+wpm+" wpm");
         containerRef.innerText='Click here to start Typing...';
         containerRef.blur();
     }else{
