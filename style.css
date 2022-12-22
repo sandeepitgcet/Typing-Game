@@ -1,0 +1,83 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+body{
+    background-color: antiquewhite;
+    padding: 20px;
+}
+.game{
+    width: min(100%-15px,600px);
+    height: min(100%-15px,600px);
+    border: 1px solid black;
+}
+
+.main{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    gap: 5px;
+}
+
+
+#details{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 30px;
+    width: min(100%,600px)
+}
+
+#timer{
+    border: 1px solid black;
+    width: 50%;
+}
+
+#wpm{
+    border: 1px solid black;
+    width: 50%;
+}
+
+#quote{
+    width: min(100%, 600px);
+    height: 150px;
+    border: 1px solid black;
+    padding: 20px;
+    word-wrap: break-word;
+    overflow-y: scroll;
+}
+
+#container{
+    width: min(100%, 600px);
+    height: 150px;
+    border: 1px solid black;
+    padding: 20px;
+    word-wrap: break-word;
+    overflow-y: scroll;
+    opacity: 0.5;
+}
+
+.controls{
+    width: min(100%, 600px);
+    display: flex;
+}
+
+button{
+    width: 50%;
+    color: white;
+    background-color: green;
+    
+}
+
+.correct {
+  color: green;
+}
+
+.incorrect {
+  color: red;
+  text-decoration: underline;
+}
