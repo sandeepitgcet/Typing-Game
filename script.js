@@ -4,6 +4,7 @@ const wpmRef=document.getElementById("wpm");
 const containerRef=document.getElementById("container");
 const quoteRef=document.getElementById("quote");
 let interval=null;
+let qq=null;
 // async function getData(){
 //     var data = await (await fetch(url)).json();
 //     document.getElementById("container").innerHTML=data["content"];
@@ -31,6 +32,13 @@ function startTimer(){
     seconds++;
     timerRef.innerText=seconds;
 }
+function highLight(index){
+    let text=quoteRef.innerText.split('');
+    const mark=document.createElement("mark");
+    mark.innerHTML=text[index];
+    text[index]=mark.outerHTML;
+    quoteRef.innerHTML=text.join('');
+}
 
 function start(){
     const play=document.getElementById("play");
@@ -49,6 +57,8 @@ function start(){
     containerRef.innerText='';
     containerRef.focus();
     containerRef.setAttribute("data-index","0");
+    qq=quoteRef.innerText;
+    highLight(0);
     interval=setInterval(startTimer,1000);
 }
 
@@ -63,6 +73,8 @@ function reset(){
     containerRef.style.opacity="0.5";
     containerRef.innerText='';
     containerRef.setAttribute("data-index","0");
+    quoteRef.innerText='';
+    containerRef.setAttribute("data-char",quoteRef.innerText.charAt(0));
     
 }
 
@@ -77,7 +89,7 @@ containerRef.addEventListener("keydown",(event)=>{
 });
 containerRef.addEventListener("keyup",(event)=>{
     event.preventDefault();
-    const keys=["Enter","CapsLock","Backspace","Delete","Control","Shift"];
+    const keys=["Enter","CapsLock","Backspace","Delete","Control","Shift","Tab"];
     const key=event.key;
     if(keys.includes(key)){
         return;
@@ -102,6 +114,9 @@ containerRef.addEventListener("keyup",(event)=>{
     let sel = window.getSelection();
     sel.selectAllChildren(containerRef);
     sel.collapseToEnd();
+
+    quoteRef.innerText=qq;
+    highLight(index+1);
     
 });
 

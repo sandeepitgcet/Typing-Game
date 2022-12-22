@@ -3,6 +3,11 @@
     margin: 0;
     box-sizing: border-box;
 }
+
+:root{
+    --index:0;
+}
+
 body{
     background-color: antiquewhite;
     padding: 20px;
@@ -50,6 +55,7 @@ body{
     word-wrap: break-word;
     overflow-y: scroll;
 }
+  
 
 #container{
     width: min(100%, 600px);
