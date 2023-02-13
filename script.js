@@ -15,13 +15,18 @@ const typedChars=[];
 
 function getData(){
     return new Promise((resolve,reject)=>{
-        const data=fetch(url)
-            .then((response) => response.json())
-            .then((data)=>{
-                resolve(data);
-            }).catch((error)=>{
-                reject(error);
-            });
+        const options = {
+            method: 'GET',
+            headers: {
+                'X-RapidAPI-Key': '2544b8b890mshd81a6e4bcad0f20p1f35dejsn37500fc9fe08',
+                'X-RapidAPI-Host': 'quotes15.p.rapidapi.com'
+            }
+        };
+
+        fetch('https://quotes15.p.rapidapi.com/quotes/random/', options)
+            .then(response => response.json())
+            .then(response => resolve(response))
+            .catch(err => reject(err));
 
     })
 }
